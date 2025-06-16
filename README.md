@@ -13,7 +13,7 @@
 
 ##  Scenario
 
-Management suspects that some employees may be using TOR browsers to bypass network security controls because recent network logs show unusual encrypted traffic patterns and connections to known TOR entry nodes. Additionally, there have been anonymous reports of employees discussing ways to access restricted sites during work hours. The goal is to detect any TOR usage and analyze related security incidents to mitigate potential risks. If any use of TOR is found, notify management.
+There’s a concern from management that some employees might be using TOR browsers to get around network security controls. This comes after recent network logs showed strange encrypted traffic and connections to known TOR entry nodes. On top of that, there have been anonymous reports of employees talking about how to access restricted websites during work hours. The task is to check for any TOR usage, review any related security incidents, and help reduce any potential risks. If TOR activity is confirmed, management needs to be informed.
 
 ### High-Level TOR-Related IoC Discovery Plan
 
@@ -27,20 +27,19 @@ Management suspects that some employees may be using TOR browsers to bypass netw
 
 ### 1. Searched the `DeviceFileEvents` Table
 
-Searched for any file that had the string "tor" in it and discovered what looks like the user "employee" downloaded a TOR installer, did something that resulted in many TOR-related files being copied to the desktop, and the creation of a file called `tor-shopping-list.txt` on the desktop at `2024-11-08T22:27:19.7259964Z`. These events began at `2024-11-08T22:14:48.6065231Z`.
+Searched for any file that had the string "tor" in it and discovered what looks like the user "labuser" downloaded a TOR installer, did something that resulted in many TOR-related files being copied to the desktop, and the creation of a file called `tor-shopping-list.txt` on the desktop at `2025-06-08T12:48:40.7259964Z`. These events began at `2025-06-08T12:11:21.6065231Z`.
 
 **Query used to locate events:**
 
 ```kql
 DeviceFileEvents  
-| where DeviceName == "threat-hunt-lab"  
-| where InitiatingProcessAccountName == "employee"  
-| where FileName contains "tor"  
-| where Timestamp >= datetime(2024-11-08T22:14:48.6065231Z)  
+| where DeviceName == "ishan-windows-p"  
+| where InitiatingProcessAccountName == "labuser"  
+| where FileName contains "tor"   
 | order by Timestamp desc  
 | project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName
 ```
-<img width="1212" alt="image" src="https://github.com/user-attachments/assets/71402e84-8767-44f8-908c-1805be31122d">
+<img width="1212" alt="image" src="https://github.com/user-attachments/assets/bc5cb001-c239-42d1-85f2-98f27239dde5">
 
 ---
 
